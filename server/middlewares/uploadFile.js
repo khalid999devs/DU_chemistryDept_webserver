@@ -10,7 +10,7 @@ const sanitizeFilename = (name) => {
 //file upload
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const validFields = /farmers|discussion/;
+    const validFields = /teachers/;
     if (!file.fieldname) {
       return cb(null, true);
     }
@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
 
     let destName = resolve(__dirname, `../uploads/${file.fieldname}`);
 
-    const titleStr = req.body?.title
+    const titleStr = req.body?.fullName
       .split(' ')
       .map((word) => word.toLowerCase())
       .join('-');
@@ -43,26 +43,21 @@ const storage = multer.diskStorage({
 
   filename: (req, file, cb) => {
     let type, fileExt;
-    if (file.fieldname === 'farmers') {
-      type = file.mimetype.split('/');
-      fileExt = type[type.length - 1];
-    } else {
-      type = file.originalname.split('.');
-      fileExt = type[type.length - 1];
-    }
+    // if (file.fieldname === 'farmers') {
+    //   type = file.mimetype.split('/');
+    //   fileExt = type[type.length - 1];
+    // } else {
+    type = file.originalname.split('.');
+    fileExt = type[type.length - 1];
+    // }
 
-    const titleStr = req.body?.title
+    const titleStr = req.body?.fullName
       .split(' ')
       .map((word) => word.toLowerCase())
       .join('-');
 
     let fileName = '';
-    if (
-      file.fieldname === 'videos' ||
-      file.fieldname === 'thumbnailContents' ||
-      file.fieldname === 'sliderContents' ||
-      file.fieldname === 'bannerImg'
-    ) {
+    if (file.fieldname === 'teachers') {
       fileName =
         file.fieldname + '_' + sanitizeFilename(titleStr) + '@' + Date.now();
     } else {

@@ -1,36 +1,33 @@
 module.exports = (sequelize, DataTypes) => {
-  const teachers = sequelize.define(
-    'teachers',
+  const events = sequelize.define(
+    'events',
     {
-      fullName: {
+      name: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      username: {
+      value: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      designation: {
+      date: {
         type: DataTypes.STRING,
       },
-      email: {
+      year: {
         type: DataTypes.STRING,
       },
-      password: {
-        type: DataTypes.STRING,
+      details: {
+        type: DataTypes.TEXT,
       },
-      phone: {
-        type: DataTypes.STRING,
-      },
-      image: {
+      banner: {
         type: DataTypes.JSONB,
         defaultValue: {},
       },
-      researchf: {
+      gallery: {
         type: DataTypes.JSONB,
         defaultValue: [],
       },
-      works: {
+      segments: {
         type: DataTypes.JSONB,
         defaultValue: [],
       },
@@ -40,5 +37,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  return teachers;
+  return events;
 };

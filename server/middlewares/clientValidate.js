@@ -1,4 +1,4 @@
-const { users } = require('../models');
+const { teachers } = require('../models');
 const {
   UnauthenticatedError,
   BadRequestError,
@@ -28,8 +28,8 @@ const clientRegValidate = async (req, res, next) => {
     const username = fullName.split(' ')[0].toLowerCase() + `@${Date.now()}`;
 
     if (data.phone) {
-      const isUser = await users.findOne({
-        where: { phone: phone.trim() },
+      const isUser = await teachers.findOne({
+        where: { phone: data.phone.trim() },
       });
       if (isUser) {
         if (!isUser.fullName) {

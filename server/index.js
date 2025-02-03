@@ -37,8 +37,10 @@ app.get('/test', (req, res) => {
   });
 });
 
+const adminRouter = require('./routers/admin');
 const teacherRouter = require('./routers/teachers');
 
+app.use('/api/admin', adminRouter);
 app.use('/api/teachers', teacherRouter);
 
 //notfound and errors
@@ -51,7 +53,7 @@ app.use(errorHandlerMiddleWare);
 //ports and start
 const PORT = process.env.PORT || 8001;
 db.sequelize
-  .sync({ force: true })
+  .sync()
   .then((_) => {
     console.log(`database connected`);
     app.listen(PORT, () => {

@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const teachers = sequelize.define(
-    'teachers',
+  const students = sequelize.define(
+    'students',
     {
       fullName: {
         type: DataTypes.STRING,
@@ -10,7 +10,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      designation: {
+      session: {
+        type: DataTypes.STRING,
+      },
+      year: {
         type: DataTypes.STRING,
       },
       email: {
@@ -26,11 +29,20 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.JSONB,
         defaultValue: {},
       },
-      researchf: {
+      school: {
+        type: DataTypes.STRING,
+      },
+      college: {
+        type: DataTypes.STRING,
+      },
+      address: {
+        type: DataTypes.STRING,
+      },
+      works: {
         type: DataTypes.JSONB,
         defaultValue: [],
       },
-      works: {
+      writings: {
         type: DataTypes.JSONB,
         defaultValue: [],
       },
@@ -40,5 +52,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  return teachers;
+  return students;
 };

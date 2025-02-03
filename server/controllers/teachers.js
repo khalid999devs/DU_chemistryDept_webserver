@@ -7,10 +7,19 @@ const {
 } = require('../errors');
 const { sendToken } = require('../utils/createToken');
 const mailer = require('../utils/sendMail');
+const deleteFile = require('../utils/deleteFile');
 
 const createTeacher = async (req, res) => {
-  const userData = req.user;
-  const { byPassOTP = false } = req.body;
+  let userData = req.user;
+
+  if (req?.file?.path) {
+    userData.image = {
+      url: req.file.path,
+      serverImg: req.file,
+    };
+  }
+  if (userData.researchf) userData.researchf = JSON.parse(userData.researchf);
+  if (userData.works) userData.works = JSON.parse(userData.works);
 
   if (req.mode === 'update') {
     await teachers.update(userData);
@@ -45,10 +54,10 @@ const loginTeacher = async (req, res) => {
 };
 
 const getTeacher = async (req, res) => {
-  const user = req.user;
+  const userId = req.params.id;
 
   const userInfo = await teachers.findOne({
-    where: { id: user.id },
+    where: { id: userId },
   });
   if (!userInfo) {
     throw new UnauthorizedError('You are not authorized!');
@@ -62,22 +71,55 @@ const getTeacher = async (req, res) => {
 };
 
 const getAllTeachers = async (req, res) => {
-  const teachers = await teachers.findAll({});
+  const teachersObj = await teachers.findAll({});
 
   res.json({
     succeed: true,
     msg: "Successfully fetched teachers' data!",
-    teachers,
+    teachers: teachersObj,
   });
 };
 
 const updateTeacher = async (req, res) => {
-  const data = req.body;
-  await teachers.update({ ...data }, { where: { id: req.user.id } });
+  let data = req.body;
+  const id = req.params.id;
+  const targetTeacher = await teachers.findByPk(id);
+  if (!targetTeacher) throw new NotFoundError('Teacher not found!');
+
+  if (req?.file?.path) {
+    data.image = {
+      url: req.file.path,
+      serverImg: req.file,
+    };
+    if (targetTeacher?.image?.url) deleteFile(targetTeacher.image.url);
+  }
+  if (data.researchf) data.researchf = JSON.parse(data.researchf);
+  if (data.works) data.works = JSON.parse(data.works);
+
+  await teachers.update({ ...data }, { where: { id: id } });
 
   res.json({
     succeed: true,
     msg: 'Successfully updated',
+  });
+};
+
+const deleteTeacher = async (req, res) => {
+  const id = req.params.id;
+  const targetTeacher = await teachers.findByPk(id);
+  if (!targetTeacher) {
+    throw new BadRequestError('Invalid Teacher Id provided!');
+  }
+
+  if (targetTeacher?.image?.url) {
+    deleteFile(targetTeacher.image.url);
+  }
+
+  await targetTeacher.destroy();
+
+  res.json({
+    succeed: true,
+    msg: 'Successfully deleted teacher!',
   });
 };
 
@@ -87,4 +129,5 @@ module.exports = {
   getTeacher,
   getAllTeachers,
   updateTeacher,
+  deleteTeacher,
 };
