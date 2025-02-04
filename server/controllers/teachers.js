@@ -33,7 +33,7 @@ const createTeacher = async (req, res) => {
   res.json({
     succeed: true,
     msg: 'teacher created successfully',
-    user: user,
+    teacher: user,
   });
 };
 
@@ -66,7 +66,7 @@ const getTeacher = async (req, res) => {
   res.json({
     succeed: true,
     msg: 'Successfully got Teacher!',
-    user: userInfo,
+    teacher: userInfo,
   });
 };
 

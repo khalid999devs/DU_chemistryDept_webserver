@@ -4,6 +4,7 @@ const {
   BadRequestError,
   UnauthorizedError,
 } = require('../errors');
+const deleteFile = require('../utils/deleteFile');
 
 const passwordValidate = async (req, res, next) => {
   const { id, mode } = req.user;
@@ -35,6 +36,7 @@ const clientRegValidate = async (req, res, next) => {
         if (!isUser.fullName) {
           req.mode = 'update';
         } else {
+          if (req?.file?.path) deleteFile(req.file.path);
           throw new UnauthorizedError('User already exists!');
         }
       }

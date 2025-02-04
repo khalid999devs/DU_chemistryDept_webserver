@@ -39,9 +39,15 @@ app.get('/test', (req, res) => {
 
 const adminRouter = require('./routers/admin');
 const teacherRouter = require('./routers/teachers');
+const studentRouter = require('./routers/students');
+const noticeRouter = require('./routers/notices');
+const memorialRouter = require('./routers/memorials');
 
 app.use('/api/admin', adminRouter);
 app.use('/api/teachers', teacherRouter);
+app.use('/api/students', studentRouter);
+app.use('/api/notices', noticeRouter);
+app.use('/api/memorials', memorialRouter);
 
 //notfound and errors
 const errorHandlerMiddleWare = require('./middlewares/errorHandler');
