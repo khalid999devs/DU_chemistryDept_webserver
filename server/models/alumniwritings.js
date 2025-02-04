@@ -20,9 +20,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.JSONB,
         defaultValue: {},
       },
-      details: {
-        type: DataTypes.TEXT,
-      },
       images: {
         type: DataTypes.JSONB,
         defaultValue: [],

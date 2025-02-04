@@ -42,12 +42,18 @@ const teacherRouter = require('./routers/teachers');
 const studentRouter = require('./routers/students');
 const noticeRouter = require('./routers/notices');
 const memorialRouter = require('./routers/memorials');
+const writingRouter = require('./routers/writings');
+const alumniwritingRouter = require('./routers/alumniwritings');
+const eventRouter = require('./routers/events');
 
 app.use('/api/admin', adminRouter);
 app.use('/api/teachers', teacherRouter);
 app.use('/api/students', studentRouter);
 app.use('/api/notices', noticeRouter);
 app.use('/api/memorials', memorialRouter);
+app.use('/api/writings', writingRouter);
+app.use('/api/alumniwritings', alumniwritingRouter);
+app.use('/api/events', eventRouter);
 
 //notfound and errors
 const errorHandlerMiddleWare = require('./middlewares/errorHandler');

@@ -11,7 +11,7 @@ const sanitizeFilename = (name) => {
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const validFields =
-      /teachers|students|notices|memorials|writtings|alumniwrittings/;
+      /teachers|students|notices|memorials|writings|alumniwritings|evbanner|evgallery/;
     if (!file.fieldname) {
       return cb(null, true);
     }
@@ -30,6 +30,13 @@ const storage = multer.diskStorage({
         .join('-');
     else if (req?.body?.title)
       titleStr = req.body?.title
+        .slice(0, 20)
+        .split(' ')
+        .map((word) => word.toLowerCase())
+        .join('-');
+    else if (req?.body?.name)
+      titleStr = req.body?.name
+        .slice(0, 20)
         .split(' ')
         .map((word) => word.toLowerCase())
         .join('-');
@@ -40,6 +47,22 @@ const storage = multer.diskStorage({
       destName = resolve(
         __dirname,
         `../uploads/${file.fieldname}/${req.body?.batch || 'general'}`
+      );
+    } else if (
+      file.fieldname === 'writings' ||
+      file.fieldname === 'alumniwritings'
+    ) {
+      destName = resolve(
+        __dirname,
+        `../uploads/${file.fieldname}/${titleStr || 'general'}`
+      );
+    } else if (
+      file.fieldname === 'evbanner' ||
+      file.fieldname === 'evgallery'
+    ) {
+      destName = resolve(
+        __dirname,
+        `../uploads/events/${titleStr || 'general'}/${file.fieldname}`
       );
     }
 
@@ -54,6 +77,16 @@ const storage = multer.diskStorage({
     let pathName = `uploads/${file.fieldname}`;
     if (file.fieldname === 'memorials') {
       pathName = `uploads/${file.fieldname}/${req.body?.batch || 'general'}`;
+    } else if (
+      file.fieldname === 'writings' ||
+      file.fieldname === 'alumniwritings'
+    ) {
+      pathName = `uploads/${file.fieldname}/${titleStr || 'general'}`;
+    } else if (
+      file.fieldname === 'evbanner' ||
+      file.fieldname === 'evgallery'
+    ) {
+      pathName = `uploads/events/${titleStr || 'general'}/${file.fieldname}`;
     }
 
     cb(null, pathName);
@@ -76,6 +109,13 @@ const storage = multer.diskStorage({
         .join('-');
     else if (req?.body?.title)
       titleStr = req.body?.title
+        ?.slice(0, 20)
+        .split(' ')
+        .map((word) => word.toLowerCase())
+        .join('-');
+    else if (req?.body?.name)
+      titleStr = req.body?.name
+        .slice(0, 20)
         .split(' ')
         .map((word) => word.toLowerCase())
         .join('-');
@@ -85,7 +125,11 @@ const storage = multer.diskStorage({
       file.fieldname === 'teachers' ||
       file.fieldname === 'students' ||
       file.fieldname === 'notices' ||
-      file.fieldname === 'memorials'
+      file.fieldname === 'memorials' ||
+      file.fieldname === 'writings' ||
+      file.fieldname === 'alumniwritings' ||
+      file.fieldname === 'evbanner' ||
+      file.fieldname === 'evgallery'
     ) {
       fileName =
         file.fieldname + '_' + sanitizeFilename(titleStr) + '@' + Date.now();

@@ -8,6 +8,7 @@ const {
 const { sendToken } = require('../utils/createToken');
 const mailer = require('../utils/sendMail');
 const deleteFile = require('../utils/deleteFile');
+const { Sequelize } = require('sequelize');
 
 const createStudent = async (req, res) => {
   let userData = req.body;
@@ -79,7 +80,15 @@ const getStudent = async (req, res) => {
 };
 
 const getAllstudents = async (req, res) => {
-  const studentsObj = await students.findAll({});
+  const studentsObj = await students.findAll({
+    attributes: [
+      'id',
+      'fullName',
+      'username',
+      [Sequelize.literal(`image->>'url'`), 'avatar'],
+      'createdAt',
+    ],
+  });
 
   res.json({
     succeed: true,

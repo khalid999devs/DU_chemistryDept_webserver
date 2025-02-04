@@ -11,12 +11,13 @@ const deleteFile = require('../utils/deleteFile');
 
 const createWriting = async (req, res) => {
   let writingData = req.body;
-  if (!writingData.title || !req?.file?.path) {
-    throw new BadRequestError('You must provide a tite and the file!');
+
+  if (!writingData.title) {
+    throw new BadRequestError('You must provide a tite!');
   }
 
   writingData.value =
-    writingData.title.slice(0, 15).split(' ')[0].toLowerCase() +
+    writingData.title.slice(0, 20).split(' ')[0].toLowerCase() +
     `@${Date.now()}`;
   if (writingData.writerInfo)
     writingData.writerInfo = JSON.parse(writingData.writerInfo);
@@ -72,7 +73,7 @@ const updateWriting = async (req, res) => {
     if (data?.mode && data.mode === 'replaceImg') {
       if (data?.replaceImgId) {
         data.images = targetWriting.images.map((item) => {
-          if (item.id === replaceImgId) {
+          if (item.id === data.replaceImgId) {
             deleteFile(item.url);
             item.url = req.files[0].path;
             item.serverFile = req.files[0];
@@ -113,6 +114,7 @@ const updateWriting = async (req, res) => {
       data.images = [];
     }
   }
+  if (data.writerInfo) data.writerInfo = JSON.parse(data.writerInfo);
 
   await writings.update({ ...data }, { where: { id: id } });
 
